@@ -1,0 +1,564 @@
+{
+  "Signus": {
+    "createAndStoreMyDid": {
+      "desc": "Creates keys (signing and encryption keys) for a new DID owned by the caller.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["String", "didJson", "didJson Identity information as json."]
+      ],
+      "return": ["SignusResults$CreateAndStoreMyDidResult", "A future that resolves to a CreateAndStoreMyDidResult instance."]
+    },
+    "decrypt": {
+      "desc": "Decrypts a message by public-key authenticated-encryption scheme using nonce.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["Pool", "pool", "pool       The pool."],
+        ["String", "myDid", "myDid        DID"],
+        ["String", "did", "did          DID that signed the message"],
+        ["byte[]", "encryptedMsg", "encryptedMsg encrypted message"],
+        ["byte[]", "nonce", "nonce        nonce that encrypted message"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing the decrypted message."]
+    },
+    "decryptSealed": {
+      "desc": "Decrypts a message by public-key anonymous-encryption scheme.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "did", "did          DID that signed the message"],
+        ["byte[]", "encryptedMsg", "encryptedMsg encrypted message"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing the decrypted message."]
+    },
+    "encrypt": {
+      "desc": "Encrypts a message by public-key (associated with their did) authenticated-encryption scheme",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["Pool", "pool", "pool    The pool."],
+        ["String", "myDid", "myDid   encrypting DID"],
+        ["String", "did", "did     encrypting DID"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["SignusResults$EncryptResult", "A future that resolves to a JSON string containing an encrypted message and nonce."]
+    },
+    "encryptSealed": {
+      "desc": "Encrypts a message by public-key (associated with did) anonymous-encryption scheme.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["Pool", "pool", "pool    The pool."],
+        ["String", "did", "did     encrypted DID"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing an encrypted message and nonce."]
+    },
+    "getDidMetadata": {
+      "desc": "Retrieves the meta information for the giving DID in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "did", "did"]
+      ],
+      "return": ["String", "A future resolving to a metadata"]
+    },
+    "getEndpointForDid": {
+      "desc": "",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["Pool", "pool", "pool The pool."],
+        ["String", "did", "did"]
+      ],
+      "return": ["SignusResults$EndpointForDidResult", "A future resolving to a endpoint object"]
+    },
+    "keyForDid": {
+      "desc": "Returns ver key (key id) for the given DID.\n\n\"keyForDid\" call follow the idea that we resolve information about their DID from\nthe ledger with cache in the local wallet. The \"openWallet\" call has freshness parameter\nthat is used for checking the freshness of cached pool value.\n\nNote if you don\u0027t want to resolve their DID info from the ledger you can use\n\"keyForLocalDid\" call instead that will look only to local wallet and skip\nfreshness checking.\n\nNote that \"createAndStoreMyDid\" makes similar wallet record as \"createKey\".\nAs result we can use returned ver key in all generic crypto and messaging functions.",
+      "params": [
+        ["Pool", "pool", "pool   The pool."],
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "did", "did"]
+      ],
+      "return": ["String", "A future resolving to a verkey"]
+    },
+    "keyForLocalDid": {
+      "desc": "Returns ver key (key id) for the given DID.\n\n\"keyForLocalDid\" call looks data stored in the local wallet only and skips freshness checking.\n\nNote if you want to get fresh data from the ledger you can use \"keyForDid\" call\ninstead.\n\nNote that \"createAndStoreMyDid\" makes similar wallet record as \"createKey\".\nAs result we can use returned ver key in all generic crypto and messaging functions.",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "did", "did"]
+      ],
+      "return": ["String", "A future resolving to a verkey"]
+    },
+    "replaceKeysApply": {
+      "desc": "Apply temporary keys as main for an existing DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "did", "did    The DID"]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    },
+    "replaceKeysStart": {
+      "desc": "Generated new signing and encryption keys for an existing DID owned by the caller.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "did", "did          The DID"],
+        ["String", "identityJson", "identityJson identity information as json."]
+      ],
+      "return": ["String", "A future that resolves to a ReplaceKeysStartResult instance."]
+    },
+    "setDidMetadata": {
+      "desc": "Saves/replaces the meta information for the giving DID in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "did", "did      The encrypted Did."],
+        ["String", "metadata", "metadata The meta information that will be store with the DID."]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    },
+    "setEndpointForDid": {
+      "desc": "",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "did", "did          The encrypted Did."],
+        ["String", "address", "address      ."],
+        ["String", "transportKey", "transportKey ."]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    },
+    "sign": {
+      "desc": "Signs a message by a signing key associated with my DID. The DID with a signing key.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["String", "did", "did     signing DID"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["byte[]", "A future that resolves to a a signature string."]
+    },
+    "storeTheirDid": {
+      "desc": "Saves their DID for a pairwise connection in a secured Wallet so that it can be used to verify transaction.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "identityJson", "identityJson Identity information as json."]
+      ],
+      "return": ["Void", "A future that does not resolve any value."]
+    },
+    "verifySignature": {
+      "desc": "Verify a signature created by a key associated with a DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet    The wallet."],
+        ["Pool", "pool", "pool      The pool."],
+        ["String", "did", "did       DID that signed the message"],
+        ["byte[]", "message", "message   message"],
+        ["byte[]", "signature", "signature a signature to be verified"]
+      ],
+      "return": ["Boolean", "A future that resolves to true if signature is valid, otherwise false."]
+    }
+  },
+  "Pairwise": {
+    "createPairwise": {
+      "desc": "Creates pairwise.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "theirDid", "theirDid encrypted DID"],
+        ["String", "myDid", "myDid    encrypted DID"],
+        ["String", "metadata", "metadata Optional: extra information for pairwise"]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    },
+    "getPairwise": {
+      "desc": "Gets pairwise information for specific their_did.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "theirDid", "theirDid encrypted DID"]
+      ],
+      "return": ["String", "A future that resolves to string value."]
+    },
+    "isPairwiseExists": {
+      "desc": "Check if pairwise is exists.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "theirDid", "theirDid encrypted DID."]
+      ],
+      "return": ["Boolean", "A future that resolves to true - if pairwise is exists, false - otherwise."]
+    },
+    "listPairwise": {
+      "desc": "Get list of saved pairwise.",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."]
+      ],
+      "return": ["String", "A future that resolves to string value."]
+    },
+    "setPairwiseMetadata": {
+      "desc": "Save some data in the Wallet for pairwise associated with Did.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "theirDid", "theirDid encoded Did"],
+        ["String", "metadata", "metadata some extra information for pairwise"]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    }
+  },
+  "Anoncreds": {
+    "issuerCreateAndStoreClaimDef": {
+      "desc": "Create keys (both primary and revocation) for the given schema and signature type (currently only CL signature type is supported).",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "issuerDid", "issuerDid The DID of the issuer."],
+        ["String", "schemaJson", "schemaJson The JSON schema for the claim."],
+        ["String", "signatureType", "signatureType The signature type."],
+        ["boolean", "createNonRevoc", "createNonRevoc Whether or not to create a non-revokable claim definition."]
+      ],
+      "return": ["String", "A future resolving to a JSON string containing the claim definition."]
+    },
+    "issuerCreateAndStoreRevocReg": {
+      "desc": "Create a new revocation registry for the given claim definition",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "issuerDid", "issuerDid\tThe DID of the issuer."],
+        ["int", "schemaSeqNo", "schemaSeqNo The sequence number of the schema to use."],
+        ["int", "maxClaimNum", "maxClaimNum The maximum claim numbber."]
+      ],
+      "return": ["String", "A future resolving to a JSON string containing the revocation registry."]
+    },
+    "issuerCreateClaim": {
+      "desc": "Signs a given claim for the given user by a given key (claim def).",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "claimReqJson", "claimReqJson  a claim request with a blinded secret"],
+        ["String", "claimJson", "claimJson a claim containing attribute values for each of requested attribute names."],
+        ["int", "userRevocIndex", "userRevocIndex index of a new user in the revocation registry (optional, pass -1 if user_revoc_index is absentee; default one is used if not provided)"]
+      ],
+      "return": ["AnoncredsResults$IssuerCreateClaimResult", "A future resolving to a revocation registry update json with a newly issued claim"]
+    },
+    "issuerRevokeClaim": {
+      "desc": "Revokes a user identified by a revoc_id in a given revoc-registry.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "issuerDid", "issuerDid\tThe DID of the issuer."],
+        ["int", "schemaSeqNo", "schemaSeqNo The sequence number of the schema to use."],
+        ["int", "userRevocIndex", "userRevocIndex index of the user in the revocation registry"]
+      ],
+      "return": ["String", "A future resolving to a revocation registry update json with a revoked claim"]
+    },
+    "proverCreateAndStoreClaimReq": {
+      "desc": "Creates a clam request json for the given claim offer and stores it in a secure wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "proverDid", "proverDid The DID of the prover."],
+        ["String", "claimOfferJson", "claimOfferJson claim offer as a json containing information about the issuer and a claim"],
+        ["String", "claimDefJson", "claimDefJson claim definition json associated with issuer_did and schema_seq_no in the claim_offer"],
+        ["String", "masterSecretName", "masterSecretName the name of the master secret stored in the wallet"]
+      ],
+      "return": ["String", "A future that resolves to a claim request json."]
+    },
+    "proverCreateMasterSecret": {
+      "desc": "Creates a master secret with a given name and stores it in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "masterSecretName", "masterSecretName a new master secret name."]
+      ],
+      "return": ["Void", "A future that does not resolve any value."]
+    },
+    "proverCreateProof": {
+      "desc": "Creates a proof according to the given proof request.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "proofRequest", "proofRequest proof request json as come from the verifier"],
+        ["String", "requestedClaims", "requestedClaims either a claim or self-attested attribute for each requested attribute"],
+        ["String", "schemas", "schemas all schema jsons participating in the proof request"],
+        ["String", "masterSecret", "masterSecret the name of the master secret stored in the wallet"],
+        ["String", "claimDefs", "claimDefs all claim definition jsons participating in the proof request"],
+        ["String", "revocRegs", "revocRegs all revocation registry jsons participating in the proof request"]
+      ],
+      "return": ["String", "A future resolving to a Proof json"]
+    },
+    "proverGetClaimOffers": {
+      "desc": "Gets all stored claim offers (see prover_store_claim_offer).",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "filterJson", "filterJson optional filter to get claim offers for specific Issuer, claim_def or schema only only"]
+      ],
+      "return": ["String", "A future that resolves to a json with a list of claim offers for the filter."]
+    },
+    "proverGetClaims": {
+      "desc": "Gets human readable claims according to the filter.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "filter", "filter filter for claims"]
+      ],
+      "return": ["String", "A future that resolves to a claims json"]
+    },
+    "proverGetClaimsForProofReq": {
+      "desc": "Gets human readable claims matching the given proof request.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "proofRequest", "proofRequest proof request json"]
+      ],
+      "return": ["String", "A future that resolves to a json with claims for the given pool request."]
+    },
+    "proverStoreClaim": {
+      "desc": "Updates the claim by a master secret and stores in a secure wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet A Wallet."],
+        ["String", "claim", "claim The claim to store."]
+      ],
+      "return": ["Void", "A future that does not resolve a value."]
+    },
+    "proverStoreClaimOffer": {
+      "desc": "Stores a claim offer from the given issuer in a secure storage.",
+      "params": [
+        ["Wallet", "wallet", "wallet A wallet."],
+        ["String", "claimOfferJson", "claimOfferJson claim offer as a json containing information about the issuer and a claim"]
+      ],
+      "return": ["Void", "A future that does not resolve any value."]
+    },
+    "verifierVerifyProof": {
+      "desc": "Verifies a proof (of multiple claim).",
+      "params": [
+        ["String", "proofRequest", "proofRequest initial proof request as sent by the verifier"],
+        ["String", "proof", "proof proof json"],
+        ["String", "schemas", "schemas all schema jsons participating in the proof"],
+        ["String", "claimDefs", "claimDefs all claim definition jsons participating in the proof"],
+        ["String", "revocRegs", "revocRegs all revocation registry jsons participating in the proof"]
+      ],
+      "return": ["Boolean", "A future resolving to true if signature is valid, otherwise false."]
+    }
+  },
+  "Crypto": {
+    "createKey": {
+      "desc": "Creates keys pair and stores in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["String", "keyJson", "keyJson Key information as json.\n               {\n               \"seed\": string, // Optional (if not set random one will be used); Seed information that allows deterministic key creation.\n               \"crypto_type\": string, // Optional (if not set then ed25519 curve is used); Currently only \u0027ed25519\u0027 value is supported for this field.\n               }"]
+      ],
+      "return": ["String", "A future resolving to a verkey"]
+    },
+    "cryptoBox": {
+      "desc": "Encrypt a message by authenticated-encryption scheme.\n\u003cp\u003e\nSender can encrypt a confidential message specifically for Recipient, using Sender\u0027s public key.\nUsing Recipient\u0027s public key, Sender can compute a shared secret key.\nUsing Sender\u0027s public key and his secret key, Recipient can compute the exact same shared secret key.\nThat shared secret key can be used to verify that the encrypted message was not tampered with,\nbefore eventually decrypting it.\n\u003cp\u003e\nRecipient only needs Sender\u0027s public key, the nonce and the ciphertext to peform decryption.\nThe nonce doesn\u0027t have to be confidential.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey)\nfor specific DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["String", "myVk", "myVk    id (verkey) of my key. The key must be created by calling indy_create_key or indy_create_and_store_my_did"],
+        ["String", "theirVk", "theirVk id (verkey) of their key"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["CryptoResults$EncryptResult", "A future that resolves to a JSON string containing an encrypted message and nonce."]
+    },
+    "cryptoBoxOpen": {
+      "desc": "Decrypt a message by authenticated-encryption scheme.\n\u003cp\u003e\nSender can encrypt a confidential message specifically for Recipient, using Sender\u0027s public key.\nUsing Recipient\u0027s public key, Sender can compute a shared secret key.\nUsing Sender\u0027s public key and his secret key, Recipient can compute the exact same shared secret key.\nThat shared secret key can be used to verify that the encrypted message was not tampered with,\nbefore eventually decrypting it.\n\u003cp\u003e\nRecipient only needs Sender\u0027s public key, the nonce and the ciphertext to peform decryption.\nThe nonce doesn\u0027t have to be confidential.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey)\nfor specific DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "myVk", "myVk         id (verkey) of my key. The key must be created by calling indy_create_key or indy_create_and_store_my_did"],
+        ["String", "theirVk", "theirVk      id (verkey) of their key"],
+        ["byte[]", "encryptedMsg", "encryptedMsg encrypted message"],
+        ["byte[]", "nonce", "nonce        nonce that encrypted message"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing the decrypted message."]
+    },
+    "cryptoBoxSeal": {
+      "desc": "Encrypts a message by anonymous-encryption scheme.\n\u003cp\u003e\nSealed boxes are designed to anonymously send messages to a Recipient given its public key.\nOnly the Recipient can decrypt these messages, using its private key.\nWhile the Recipient can verify the integrity of the message, it cannot verify the identity of the Sender.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey)\nfor specific DID.",
+      "params": [
+        ["String", "theirVk", "theirVk id (verkey) of their key"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing an encrypted message and nonce."]
+    },
+    "cryptoBoxSealOpen": {
+      "desc": "Decrypts a message by anonymous-encryption scheme.\n\u003cp\u003e\nSealed boxes are designed to anonymously send messages to a Recipient given its public key.\nOnly the Recipient can decrypt these messages, using its private key.\nWhile the Recipient can verify the integrity of the message, it cannot verify the identity of the Sender.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey)\nfor specific DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "myVk", "myVk         id (verkey) of my key. The key must be created by calling indy_create_key or indy_create_and_store_my_did"],
+        ["byte[]", "encryptedMsg", "encryptedMsg encrypted message"]
+      ],
+      "return": ["byte[]", "A future that resolves to a JSON string containing the decrypted message."]
+    },
+    "cryptoSign": {
+      "desc": "Signs a message with a key.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey) for specific DID.",
+      "params": [
+        ["Wallet", "wallet", "wallet  The wallet."],
+        ["String", "myVk", "myVk    id (verkey) of my key. The key must be created by calling indy_create_key or indy_create_and_store_my_did"],
+        ["byte[]", "message", "message a message to be signed"]
+      ],
+      "return": ["byte[]", "A future that resolves to a a signature string."]
+    },
+    "cryptoVerify": {
+      "desc": "Verify a signature with a verkey.\n\u003cp\u003e\nNote to use DID keys with this function you can call indy_key_for_did to get key id (verkey) for specific DID.",
+      "params": [
+        ["String", "theirVk", "theirVk   verkey to use"],
+        ["byte[]", "message", "message   message"],
+        ["byte[]", "signature", "signature a signature to be verified"]
+      ],
+      "return": ["Boolean", "A future that resolves to true if signature is valid, otherwise false."]
+    },
+    "getKeyMetadata": {
+      "desc": "Retrieves the meta information for the giving key in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet The wallet."],
+        ["String", "verkey", "verkey The key (verkey, key id) to retrieve metadata."]
+      ],
+      "return": ["String", "A future resolving to a metadata"]
+    },
+    "setKeyMetadata": {
+      "desc": "Saves/replaces the meta information for the giving key in the wallet.",
+      "params": [
+        ["Wallet", "wallet", "wallet   The wallet."],
+        ["String", "verkey", "verkey   The key (verkey, key id) to store metadata."],
+        ["String", "metadata", "metadata The meta information that will be store with the key."]
+      ],
+      "return": ["Void", "A future that resolves no value."]
+    }
+  },
+  "Agent": {
+    "parseMsg": {
+      "desc": "",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "recipientKey", "recipientKey"],
+        ["byte[]", "encryptedMsg", "encryptedMsg encrypted message"]
+      ],
+      "return": ["AgentResults$ParseMsgResult", "A future that resolves to senderKey and message."]
+    },
+    "prepAnonymousMsg": {
+      "desc": "",
+      "params": [
+        ["String", "recipientKey", "recipientKey"],
+        ["byte[]", "message", "message      a message to be encrypted"]
+      ],
+      "return": ["byte[]", "A future that resolves to an encrypted message."]
+    },
+    "prepMsg": {
+      "desc": "",
+      "params": [
+        ["Wallet", "wallet", "wallet       The wallet."],
+        ["String", "senderKey", "senderKey"],
+        ["String", "recipientKey", "recipientKey"],
+        ["byte[]", "message", "message      a message to be encrypted"]
+      ],
+      "return": ["byte[]", "A future that resolves to an encrypted message."]
+    }
+  },
+  "Ledger": {
+    "buildAttribRequest": {
+      "desc": "Builds an ATTRIB request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."],
+        ["String", "hash", "hash Hash of attribute data"],
+        ["String", "raw", "raw represented as json, where key is attribute name and value is it\u0027s value"],
+        ["String", "enc", "enc Encrypted attribute data"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildClaimDefTxn": {
+      "desc": "Builds an CLAIM_DEF request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["int", "xref", "xref Seq. number of schema"],
+        ["String", "signatureType", "signatureType signature type (only CL supported now)"],
+        ["String", "data", "data components of a key in json: N, R, S, Z"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetAttribRequest": {
+      "desc": "Builds a GET_ATTRIB request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."],
+        ["String", "data", "data name (attribute name)"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetClaimDefTxn": {
+      "desc": "Builds a GET_CLAIM_DEF request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["int", "xref", "xref Seq. number of schema"],
+        ["String", "signatureType", "signatureType signature type (only CL supported now)"],
+        ["String", "origin", "origin issuer did"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetDdoRequest": {
+      "desc": "Builds a request to get a DDO.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetNymRequest": {
+      "desc": "Builds a GET_NYM request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetSchemaRequest": {
+      "desc": "Builds a GET_SCHEMA request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "dest", "dest Id of Identity stored in secured Wallet."],
+        ["String", "data", "data name, version"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildGetTxnRequest": {
+      "desc": "Builds a GET_TXN request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["int", "data", "data seq_no of transaction in ledger"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildNodeRequest": {
+      "desc": "Builds a NODE request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."],
+        ["String", "data", "data id of a target NYM record"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildNymRequest": {
+      "desc": "Builds a NYM request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "targetDid", "targetDid Id of Identity stored in secured Wallet."],
+        ["String", "verkey", "verkey verification key"],
+        ["String", "alias", "alias alias"],
+        ["String", "role", "role Role of a user NYM record"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "buildSchemaRequest": {
+      "desc": "Builds a SCHEMA request.",
+      "params": [
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "data", "data name, version, type, attr_names (ip, port, keys)"]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "signAndSubmitRequest": {
+      "desc": "Signs and submits request message to validator pool.",
+      "params": [
+        ["Pool", "pool", "pool A Pool."],
+        ["Wallet", "wallet", "wallet A Wallet."],
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "requestJson", "requestJson Request data json."]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "signRequest": {
+      "desc": "Signs request message.",
+      "params": [
+        ["Wallet", "wallet", "wallet A Wallet."],
+        ["String", "submitterDid", "submitterDid Id of Identity stored in secured Wallet."],
+        ["String", "requestJson", "requestJson Request data json."]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    },
+    "submitRequest": {
+      "desc": "Publishes request message to validator pool (no signing, unlike sign_and_submit_request).",
+      "params": [
+        ["Pool", "pool", "pool The Pool to publish to."],
+        ["String", "requestJson", "requestJson Request data json."]
+      ],
+      "return": ["String", "A future resolving to a JSON request string."]
+    }
+  }
+}
