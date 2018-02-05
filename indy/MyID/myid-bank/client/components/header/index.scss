@@ -1,0 +1,25 @@
+.navbar-default {
+  background-color: #555;
+  .navbar {
+    margin: 0;
+  }
+}
+
+.navbar-default .navbar-nav {
+  li a {
+    font-weight: bold;
+    color: #efefef;
+  }
+  li a:hover {
+    color: #fff;
+  }
+  .navbar-brand {
+    padding: 2px 40px 0 30px;
+    background-color: transparent !important;
+
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+$color: #333;
+body {
+  background-color: #fff;
+}
+.home {
+  font-size: 11px;
+  h1 {
+    color: $color;
+  }
+  .dropdown-menu {
+    min-width: 110px;
+  }
+}
+.col-md-6 {
+  padding: 0;
+}
+canvas {
+  height: 100vh;
+  width: 100vw;
+  display: block;
+}
+
+.toolbar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 30px;
+  // width: 200px;
+  background-color: #777;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";       /* IE 8 */
+  filter: alpha(opacity=85);  /* IE 5-7 */
+  -moz-opacity: 0.85;          /* Netscape */
+  -khtml-opacity: 0.85;        /* Safari 1.x */
+  opacity: 0.85;               /* Good browsers */
+}
+
+.form-control {
+  width: 45px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  font-size: 12px;
+  background-color: #999;
+  border-radius: 0;
+  color: #fff;
+  float: left;
+  border-image-width: 0;
+}
